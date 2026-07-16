@@ -12,9 +12,9 @@ public class User extends Person {
 		// Creates user ID/name pairs using HashMap
 		HashMap<Integer, String> validUsers = new HashMap<>();
 		
-		validUsers.put(101, "Morgan");
-		validUsers.put(202, "Ty");
-		validUsers.put(303, "Montana");
+		validUsers.put(111, "Morgan");
+		validUsers.put(222, "Ty");
+		validUsers.put(333, "Montana");
 			
 		int id = getId();
 		
