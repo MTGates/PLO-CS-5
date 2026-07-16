@@ -2,23 +2,20 @@ package librarykiosk;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Library {
-	
-	// Location of the book database
+
+    // Location of the text file that stores the library database.
     private static final String BOOK_FILE = "data/books.txt";
 
-    // Stores every book currently loaded into memory
+    // Stores every Book object currently loaded into memory.
     private ArrayList<Book> books;
 
     /**
-     * Creates a Library object and automatically
-     * loads all books from the text file.
+     * Creates a Library object and loads all books
+     * from the text file into the ArrayList.
      */
     public Library() {
         books = new ArrayList<>();
@@ -26,18 +23,18 @@ public class Library {
     }
 
     /**
-     * Returns the ArrayList of books.
-     * GUI classes can use this to display books.
+     * Returns the current collection of books.
+     * GUI classes can use this list to display search results.
      *
-     * @return list of books
+     * @return ArrayList of Book objects
      */
     public ArrayList<Book> getBooks() {
         return books;
+    }
 
-}
     /**
-     * Reloads the book collection from books.txt.
-     * Existing books are cleared before reloading.
+     * Reloads every book from books.txt.
+     * Clears the current list before loading.
      */
     public void refreshBooks() {
 
@@ -52,7 +49,7 @@ public class Library {
 
         try (Scanner input = new Scanner(file)) {
 
-            // Skip the header row
+            // Skip the header row of the text file.
             if (input.hasNextLine()) {
                 input.nextLine();
             }
@@ -77,3 +74,4 @@ public class Library {
 
         }
     }
+}
