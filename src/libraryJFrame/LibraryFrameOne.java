@@ -19,7 +19,7 @@ import javax.swing.SpringLayout;
 /**
  * @author Morgan Fidler
  */
-public class LibraryFrame extends JFrame {
+public class LibraryFrameOne extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPasswordField passwordField;
@@ -31,7 +31,7 @@ public class LibraryFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LibraryFrame frame = new LibraryFrame();
+					LibraryFrameOne frame = new LibraryFrameOne();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +43,7 @@ public class LibraryFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LibraryFrame() {
+	public LibraryFrameOne() {
 		baseFrameOne();
 	}
 
