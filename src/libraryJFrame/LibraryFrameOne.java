@@ -19,6 +19,8 @@ import javax.swing.SpringLayout;
 /**
  * @author Morgan Fidler
  */
+//TODO: missing logical implementation
+
 public class LibraryFrameOne extends JFrame {
 
 	private static final long serialVersionUID = 1L;
