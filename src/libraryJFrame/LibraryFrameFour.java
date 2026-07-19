@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JTextArea;
 import javax.swing.JPasswordField;
-import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -31,7 +31,8 @@ public class LibraryFrameFour extends JFrame {
 	private JPasswordField txtID;
 	private JButton btnBackS3;
 	private JButton btnValidate;
-	private JFormattedTextField txtMessage;
+	private JTextArea txtMessage;
+	private JLabel lblAuthorization;
 
 	/**
 	 * Launch the application.
@@ -55,6 +56,7 @@ public class LibraryFrameFour extends JFrame {
 	public LibraryFrameFour() {
 		baseFrameS4();
 		txtMessage();
+		lblAuthorization();
 
 		// Search panel with text field, return, and query buttons
 		panelSearch();
@@ -68,12 +70,12 @@ public class LibraryFrameFour extends JFrame {
 		btnValidate = new JButton("L_>");
 		btnValidate.setFont(new Font("Arial", Font.PLAIN, 8));
 		btnValidate.setHorizontalAlignment(SwingConstants.CENTER);
-		btnValidate.setPreferredSize(new Dimension(50, 35));
-
-		btnBackS3.setPreferredSize(new Dimension(50, 35));
 
 		JPanel panelButtons = new JPanel(new GridLayout(1, 2));
 		panelButtons.setPreferredSize(new Dimension(100, 35));
+
+		btnValidate.setPreferredSize(new Dimension(50, 35));
+		btnBackS3.setPreferredSize(new Dimension(50, 35));
 
 		panelButtons.add(btnValidate);
 		panelButtons.add(btnBackS3);
@@ -89,7 +91,6 @@ public class LibraryFrameFour extends JFrame {
 	// creates the search bar field in the searchPanel
 	private void txtID() {
 		txtID = new JPasswordField();
-		txtID.setEchoChar('*');
 		txtID.setHorizontalAlignment(SwingConstants.LEFT);
 		txtID.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtID.setBorder(new LineBorder(Color.BLACK, 1));
@@ -107,19 +108,35 @@ public class LibraryFrameFour extends JFrame {
 		contentPane.add(panelSearch, BorderLayout.SOUTH);
 	}
 
+	// Creates the main text message asking for an employee ID
 	private void txtMessage() {
-		JTextArea txtMessage = new JTextArea();
+		txtMessage = new JTextArea();
+
 		txtMessage.setFont(new Font("Arial", Font.PLAIN, 36));
 		txtMessage.setEditable(false);
 		txtMessage.setLineWrap(true);
 		txtMessage.setWrapStyleWord(true);
 		txtMessage.setBackground(contentPane.getBackground());
 		txtMessage.setBorder(null);
+		txtMessage.setPreferredSize(new Dimension(450, 120));
 
 		txtMessage.setText(
-			"Please wait for a Library Employee to assist you in authorization.");
+			"Please wait for a Library Employee to assist you in authorization."
+		);
 
-		contentPane.add(txtMessage, BorderLayout.CENTER);
+		contentPane.add(txtMessage, BorderLayout.NORTH);
+	}
+
+	// Creates a label for the password box to indicate what we're asking for
+	private void lblAuthorization() {
+		lblAuthorization = new JLabel("Enter Authorization Code:");
+		lblAuthorization.setFont(new Font("Arial", Font.PLAIN, 16));
+
+		JPanel panelLabel = new JPanel(new BorderLayout());
+		panelLabel.setBackground(contentPane.getBackground());
+		panelLabel.add(lblAuthorization, BorderLayout.WEST);
+
+		contentPane.add(panelLabel, BorderLayout.CENTER);
 	}
 
 	// Creates the base layout for everything

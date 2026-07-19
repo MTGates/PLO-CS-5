@@ -7,20 +7,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.JRadioButton;
 import javax.swing.JList;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Rectangle;
+import javax.swing.DefaultListModel;
 
 /**
  * @author - Morgan Fidler
@@ -35,6 +30,9 @@ public class LibraryFrameTwo extends JFrame {
 	private JTextField textFieldSearch;
 	private JButton btnBackS1;
 	private JButton btnSearch;
+	private DefaultListModel<String> listModel;
+	private JScrollPane scrollPane;
+	private JList<String> resultsList;
 
 	/**
 	 * Launch the application.
@@ -97,13 +95,19 @@ public class LibraryFrameTwo extends JFrame {
 		panelSearch = new JPanel();
 		contentPane.add(panelSearch, BorderLayout.NORTH);
 		panelSearch.setLayout(new BorderLayout(0, 0));
+		
 	}
 
-	// Creates the list to contain search result entries
+	// Creates the list to contain search result entries, which are all clickable and placed inside a jlist nested inside a scrollpane
 	private void searchResultsList() {
-		JList list = new JList();
-		list.setFont(new Font("Arial", Font.PLAIN, 12));
-		contentPane.add(list, BorderLayout.CENTER);
+	    listModel = new DefaultListModel<>();
+	    resultsList = new JList<>(listModel);
+	    JScrollPane scrollPane = new JScrollPane();
+	    scrollPane.setViewportView(resultsList);
+	    contentPane.add(scrollPane, BorderLayout.CENTER);
+	    listModel.addElement("The Hobbit");
+	    listModel.addElement("1984");
+	    listModel.addElement("Dune");
 	}
 
 	// Creates the base layout for everything 
