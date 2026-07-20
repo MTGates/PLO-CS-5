@@ -1,6 +1,12 @@
 package librarykiosk;
+
 import java.util.HashMap;
 
+/**
+ * Creates a library employee to approve checkouts and returns
+ * Child class of Person
+ * @author Montana Gates
+ */
 public class Employee extends Person{
 	
 	public Employee(int id, String name) {
