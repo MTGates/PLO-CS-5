@@ -13,14 +13,15 @@ public class Employee extends Person{
 		HashMap<Integer, String> validEmployees = new HashMap<>();
 		
 		validEmployees.put(999, "Melvil Dewey");
-	
+		
+		// Gets employee id input
 		int id = getId();
 		
+		// Determines if employee id is valid
 		if (validEmployees.containsKey(id)) {
 				return true;
 			}
 		
-		// id is not a valid employee ID
 		return false;
 	}
 }

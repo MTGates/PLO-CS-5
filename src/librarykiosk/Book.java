@@ -1,5 +1,9 @@
 package librarykiosk;
-
+/**
+ * Stores the information of a selected book
+ * 
+ * @author Montana Gates
+ */
 public class Book {
 	private String title;
 	private String author;
@@ -64,7 +68,7 @@ public class Book {
 	public String getBookId() {
 		return bookId;
 	}
-	// Incase we have this getter used any where. Delete after confirming
+	// In case we have this getter used any where. Delete after confirming
 	public String getIsbn() {
 	    return bookId;
 	}
