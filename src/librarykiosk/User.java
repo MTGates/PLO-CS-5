@@ -22,6 +22,7 @@ public class User extends Person {
 		
 		// Creates user ID/name pairs using HashMap
 		HashMap<Integer, String> validUsers = new HashMap<>();
+		
 		// Adding pairs to the HashMap
 		validUsers.put(111, "Morgan");
 		validUsers.put(222, "Ty");
