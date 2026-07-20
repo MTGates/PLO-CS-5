@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Manages the library's collection of books.
@@ -181,6 +184,11 @@ public class Library {
     			|| year.contains(query)
     			|| genre.contains(query);
     	}
+    
+    /**
+     * Marks the selected book as checked out
+     * and saves the updated collection.
+     */
     public void checkoutBook(Book book) {
     	
     	if (book == null) {
@@ -195,6 +203,10 @@ public class Library {
     	saveBooks();
     }
     
+    /**
+     * Marks the selected book as returned
+     * and saves the updated collection.
+     */
     public void returnBook(Book book) {
     	
     	if(book == null) {
@@ -209,8 +221,55 @@ public class Library {
     	saveBooks();
     }
     
+    /**
+     * Saves the current collection of books back to books.txt.
+     *
+     * The file is completely rewritten each time this method
+     * is called so the text file always matches the current
+     * state of the ArrayList.
+     */
+    public void saveBooks() {
+    	
+    	try (PrintWriter output = new PrintWriter(new FileWriter(BOOK_FILE))) {
+    		
+    		// Rewrite the header row first
+    		output.println("bookId|title|author|publishYear|genre|available");
+    		
+    		for (Book book : books) {
+    			output.println(formatBookForFile(book));
+    		}
+    	} catch (IOException e) {
+    		
+    		System.out.println("Error saving books: " + e.getMessage());
+    		
+    		}
+    	}
+    
+    /**
+     * Converts a Book object into the format required
+     * for books.txt.
+     *
+     * Example:
+     * B0001|Pride and Prejudice|Austen, Jane|1813|Romance|true
+     *
+     * Having this helper method keeps saveBooks()
+     * shorter and prevents duplicate formatting code.
+     */
+    private String formatBookForFile(Book book) {
+    	
+    	return book.getBookId() + "|"
+    			+ book.getTitle() + "|"
+    			+ book.getAuthor() + "|"
+    			+ book.getPublishDate() + "|"
+    			+ book.getGenre() + "|"
+    			+ book.isAvailable();
+    }
     
 }
+
+    
+    
+
 
     
     
