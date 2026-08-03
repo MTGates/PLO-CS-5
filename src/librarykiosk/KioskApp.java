@@ -28,6 +28,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
 
+/**
+ * @author - Morgan Fidler
+ * This class controls 3 (possibly 4 later on) JFrames and their logical implementation and how they interact with the other classes to form the Kiosk system.
+ */
 public class KioskApp extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -49,12 +53,13 @@ public class KioskApp extends JFrame {
 	private final JTextField txtSearch = new JTextField();
 	private final JButton btnSCBackVI = new JButton("<-");
 	private final JButton btnSCQuery = new JButton("Q");
-	private DefaultListModel<String> listModel;
+	private DefaultListModel<String> listModel = new DefaultListModel<>();
 	private JList<String> resultsList;
+	private String searchQuery = "";
+	private SearchTypes searchType = SearchTypes.TITLE;
 	
 	private JPanel panelBookInfo = new JPanel();
 	private final JPanel panelBIDisplayInfo = new JPanel();
-	private String selectedBookInfo;
 	private final JPanel panelBIActions = new JPanel();
 	private final JButton btnCheckout = new JButton("Checkout");
 	private final JButton btnReturn = new JButton("Return");
@@ -62,7 +67,7 @@ public class KioskApp extends JFrame {
 	private final JTextArea txtScrollPane = new JTextArea();
 	
 	public Library workingLibrary = new Library();
-	
+	ArrayList<Book> searchingLibrary = workingLibrary.getBooks();
 
 	/**
 	 * Launch the application.
@@ -79,7 +84,7 @@ public class KioskApp extends JFrame {
 			}
 		});
 		
-		// Main method code goes here
+		// Main method code goes here, if needed
 		
 	}
 
@@ -108,6 +113,129 @@ public class KioskApp extends JFrame {
 		
 	}
 
+	/**
+	 * @return - returns the already-existing JPanel after making a lot of relevant modifications to it. Returning is unnecessary, but I'm too lazy to restructure again.
+	 */
+	private JPanel createPanelValidateUser() {
+		// Creates, constraints, and adds the base panel for ValidateId
+		panelValidateUser = new JPanel();
+		contentPane.add(panelValidateUser, "name_432252651177600");
+		panelValidateUser.setLayout(new BorderLayout(0, 0));
+		lblVIPleaseId.setOpaque(true);
+		
+		// Constraints and adds a label at the top of the base panel's BorderLayout 
+		lblVIPleaseId.setHorizontalAlignment(SwingConstants.CENTER);
+		lblVIPleaseId.setFont(new Font("Arial", Font.BOLD, 20));
+		lblVIPleaseId.setBorder(new EmptyBorder(12, 20, 12, 20));
+		panelValidateUser.add(lblVIPleaseId, BorderLayout.NORTH);
+		
+		// Constraints and adds the subpanel to hold the password box and the enter button
+		panelValidateUser.add(panelVIPassHandlers, BorderLayout.CENTER);
+		SpringLayout springLayVIPassHandlers = new SpringLayout();
+		panelVIPassHandlers.setLayout(springLayVIPassHandlers);
+		
+		// Constraints and adds the Password Field
+		springLayVIPassHandlers.putConstraint(SpringLayout.NORTH, txtVIPassBox, 60, SpringLayout.NORTH, panelVIPassHandlers);
+		springLayVIPassHandlers.putConstraint(SpringLayout.WEST, txtVIPassBox, 60, SpringLayout.WEST, panelVIPassHandlers);
+		springLayVIPassHandlers.putConstraint(SpringLayout.EAST, txtVIPassBox, -60, SpringLayout.EAST, panelVIPassHandlers);
+		txtVIPassBox.setFont(new Font("Arial", Font.BOLD, 14));
+		txtVIPassBox.setEchoChar('*');
+		panelVIPassHandlers.add(txtVIPassBox);
+		
+		// Constraints and adds the Enter button
+		springLayVIPassHandlers.putConstraint(SpringLayout.WEST, btnVIEnterId, 150, SpringLayout.WEST, panelVIPassHandlers);
+		springLayVIPassHandlers.putConstraint(SpringLayout.SOUTH, btnVIEnterId, -10, SpringLayout.SOUTH, panelVIPassHandlers);
+		springLayVIPassHandlers.putConstraint(SpringLayout.EAST, btnVIEnterId, -150, SpringLayout.EAST, panelVIPassHandlers);
+		btnVIEnterId.setFont(new Font("Arial", Font.BOLD, 12));
+		btnVIEnterId.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (txtVIPassBox.getPassword().length == 0) {
+					lblVIPleaseId.setBackground(new Color(255, 0, 0));
+				}
+				else if (compareID(txtVIPassBox.getPassword())) { // TODO: Bug here: null inputs cause an error and do not turn the label background red
+					panelSearchCatalog.setVisible(true);
+					panelValidateUser.setVisible(false);
+				}
+				else {
+					lblVIPleaseId.setBackground(new Color(255, 0, 0));
+				}
+			}
+		});
+		panelVIPassHandlers.add(btnVIEnterId);
+		
+		// Returns the complete frame
+		return panelValidateUser;
+	}
+
+	/**
+	 * @return - returns the already-existing JPanel after making a lot of relevant modifications to it. Returning is unnecessary, but I'm too lazy to restructure again.
+	 */
+	private JPanel createPanelSearchCatalog() {
+		// Creates, constraints, and adds the base panel for SearchCatalog
+		contentPane.add(panelSearchCatalog, "name_432252656295800");
+		panelSearchCatalog.setLayout(new BorderLayout(0, 0));
+		
+		// Creates, constraints, and adds the Scroll Pane to the base panel's BorderLayout
+		panelSearchCatalog.add(scrollPane, BorderLayout.CENTER);
+		refreshSearchResults(); // Refreshes the data in listModel
+		resultsList = new JList<>(listModel);
+		scrollPane.setViewportView(resultsList);
+		resultsList.addListSelectionListener(e -> {
+			if (resultsList.getSelectedIndex() != -1) {
+		        selectedBookId = resultsList.getSelectedIndex();
+		        txtScrollPane.setText(refreshBookInfoBI(searchingLibrary));
+		        panelBookInfo.setVisible(true);
+		        panelSearchCatalog.setVisible(false);
+		    }
+		});
+		
+		// Creates, constraints, and adds a subpanel to contain the search text field, enter button, and back button.
+		panelSearchCatalog.add(panelSCActions, BorderLayout.NORTH);
+		panelSCActions.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		// Creates, constraints, and adds the text field for searching to the subpanel panelSearchCatalog
+		txtSearch.setHorizontalAlignment(SwingConstants.LEFT);
+		txtSearch.setBounds(new Rectangle(2, 2, 2, 2));
+		txtSearch.setFont(new Font("Arial", Font.PLAIN, 14));
+		txtSearch.setColumns(26);
+		txtSearch.setBorder(new LineBorder(new Color(0, 0, 0), 3));
+		txtSearch.setBorder(new EmptyBorder(10, 20, 10, 160));
+		panelSCActions.add(txtSearch);
+		
+		// Creates, constraints, and adds the initiate query button
+		btnSCQuery.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnSCQuery.setFont(new Font("Arial", Font.PLAIN, 14));
+		btnSCQuery.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				refreshSearchResults();
+			}
+		});
+		panelSCActions.add(btnSCQuery);
+		
+		// Creates, constraints, and adds the return to VI frame button
+		btnSCBackVI.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnSCBackVI.setFont(new Font("Arial", Font.PLAIN, 14));
+		btnSCBackVI.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panelValidateUser.setVisible(true);
+				panelSearchCatalog.setVisible(false);
+				txtSearch.setText("");
+				refreshSearchResults();
+				txtVIPassBox.setText("");
+				lblVIPleaseId.setBackground(new Color(240, 240, 240));
+			}
+		});
+		panelSCActions.add(btnSCBackVI);
+		
+		return panelSearchCatalog;
+	}
+
+	/**
+	 * @return - returns the already-existing JPanel after making a lot of relevant modifications to it. Returning is unnecessary, but I'm too lazy to restructure again.
+	 */
 	private JPanel createPanelBookInfo() {
 		// Creates, constraints, and adds the base panel for panelBookInfo
 		panelBookInfo = new JPanel();
@@ -153,119 +281,9 @@ public class KioskApp extends JFrame {
 		return panelBookInfo;
 	}
 	
-	private JPanel createPanelValidateUser() {
-		// Creates, constraints, and adds the base panel for ValidateId
-		panelValidateUser = new JPanel();
-		contentPane.add(panelValidateUser, "name_432252651177600");
-		panelValidateUser.setLayout(new BorderLayout(0, 0));
-		lblVIPleaseId.setOpaque(true);
-		
-		// Constraints and adds a label at the top of the base panel's BorderLayout 
-		lblVIPleaseId.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVIPleaseId.setFont(new Font("Arial", Font.BOLD, 20));
-		lblVIPleaseId.setBorder(new EmptyBorder(12, 20, 12, 20));
-		panelValidateUser.add(lblVIPleaseId, BorderLayout.NORTH);
-		
-		// Constraints and adds the subpanel to hold the password box and the enter button
-		panelValidateUser.add(panelVIPassHandlers, BorderLayout.CENTER);
-		SpringLayout springLayVIPassHandlers = new SpringLayout();
-		panelVIPassHandlers.setLayout(springLayVIPassHandlers);
-		
-		// Constraints and adds the Password Field
-		springLayVIPassHandlers.putConstraint(SpringLayout.NORTH, txtVIPassBox, 60, SpringLayout.NORTH, panelVIPassHandlers);
-		springLayVIPassHandlers.putConstraint(SpringLayout.WEST, txtVIPassBox, 60, SpringLayout.WEST, panelVIPassHandlers);
-		springLayVIPassHandlers.putConstraint(SpringLayout.EAST, txtVIPassBox, -60, SpringLayout.EAST, panelVIPassHandlers);
-		txtVIPassBox.setFont(new Font("Arial", Font.BOLD, 14));
-		txtVIPassBox.setEchoChar('*');
-		panelVIPassHandlers.add(txtVIPassBox);
-		
-		// Constraints and adds the Enter button
-		springLayVIPassHandlers.putConstraint(SpringLayout.WEST, btnVIEnterId, 150, SpringLayout.WEST, panelVIPassHandlers);
-		springLayVIPassHandlers.putConstraint(SpringLayout.SOUTH, btnVIEnterId, -10, SpringLayout.SOUTH, panelVIPassHandlers);
-		springLayVIPassHandlers.putConstraint(SpringLayout.EAST, btnVIEnterId, -150, SpringLayout.EAST, panelVIPassHandlers);
-		btnVIEnterId.setFont(new Font("Arial", Font.BOLD, 12));
-		btnVIEnterId.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(compareID(txtVIPassBox.getPassword())) {
-					panelSearchCatalog.setVisible(true);
-					panelValidateUser.setVisible(false);
-				}
-				else {
-					lblVIPleaseId.setBackground(new Color(255, 0, 0));
-				}
-			}
-		});
-		panelVIPassHandlers.add(btnVIEnterId);
-		
-		// Returns the complete frame
-		return panelValidateUser;
-	}
-
-	private JPanel createPanelSearchCatalog() {
-		// Creates, constraints, and adds the base panel for SearchCatalog
-		contentPane.add(panelSearchCatalog, "name_432252656295800");
-		panelSearchCatalog.setLayout(new BorderLayout(0, 0));
-		
-		// Creates, constraints, and adds the Scroll Pane to the base panel's BorderLayout
-		panelSearchCatalog.add(scrollPane, BorderLayout.CENTER);
-		listModel = new DefaultListModel<>();
-		resultsList = new JList<>(listModel);
-		scrollPane.setViewportView(resultsList);
-		// Populates the Scroll Pane with results
-		for (Book i : workingLibrary.getBooks()) {
-			listModel.addElement(i.getData());
-		}
-		
-		resultsList.addListSelectionListener(event -> {
-			if (resultsList.getSelectedIndex() != -1) {
-		        selectedBookId = resultsList.getSelectedIndex();
-		        txtScrollPane.setText(refreshBookInfoBI());
-		        panelBookInfo.setVisible(true);
-		        panelSearchCatalog.setVisible(false);
-		    }
-		});
-		
-		// Creates, constraints, and adds a subpanel to contain the search text field, enter button, and back button.
-		panelSearchCatalog.add(panelSCActions, BorderLayout.NORTH);
-		panelSCActions.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		// Creates, constraints, and adds the text field for searching to the subpanel panelSearchCatalog
-		txtSearch.setHorizontalAlignment(SwingConstants.LEFT);
-		txtSearch.setBounds(new Rectangle(2, 2, 2, 2));
-		txtSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-		txtSearch.setColumns(26);
-		txtSearch.setBorder(new LineBorder(new Color(0, 0, 0), 3));
-		txtSearch.setBorder(new EmptyBorder(10, 20, 10, 160));
-		panelSCActions.add(txtSearch);
-		
-		// Creates, constraints, and adds the initiate query button
-		btnSCQuery.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnSCQuery.setFont(new Font("Arial", Font.PLAIN, 14));
-		panelSCActions.add(btnSCQuery);
-		btnSCBackVI.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				panelValidateUser.setVisible(true);
-				panelSearchCatalog.setVisible(false);
-				txtVIPassBox.setText("");
-				lblVIPleaseId.setBackground(new Color(240, 240, 240));
-			}
-		});
-		
-		// Creates, constraints, and adds the return to VI frame button
-		btnSCBackVI.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnSCBackVI.setFont(new Font("Arial", Font.PLAIN, 14));
-		panelSCActions.add(btnSCBackVI);
-		
-		return panelSearchCatalog;
-	}
-
 	public boolean compareID(char[] validationArray) {
-		
 		String validationString = new String(validationArray);
 		Integer validationInteger = Integer.parseInt(validationString);
-		
 		User tempUser = new User(validationInteger, "name");
 		
 		if (tempUser.validateId()) {
@@ -275,30 +293,24 @@ public class KioskApp extends JFrame {
 		// TODO: Implement error handling
 	}
 
-	
-	public String refreshBookInfoBI() {
-		ArrayList<Book> tempBookArray = new ArrayList<>(workingLibrary.getBooks());
+	public String refreshBookInfoBI(ArrayList<Book> tempBookArray) {
 		if (selectedBookId >= 0 && selectedBookId < tempBookArray.size() && tempBookArray.get(selectedBookId) != null) {
 			Book tempBook = tempBookArray.get(selectedBookId);
 			return String.format("%s - written by %s, published %s. \n\nThe quick brown fox jumps over the lazy dog - Sphinx of black quartz, judge my vow.", tempBook.getTitle(), tempBook.getAuthor(), tempBook.getPublishDate());
+			// TODO : Find a way to implement the book descriptions, if we deem it necessary
 		}
 		else return "Index Out of Bounds or other error has occurred, we apologize for the inconvenience.";
 	}
-}
-
-/** Archives
- * btnEnterID.addMouseListener(new MouseAdapter() {
-			// The compareID() method uses the current data in the passwordField to validate
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(compareID()) {
-					LibraryFrameOne kioskFrameOne = new LibraryFrameOne();
-					LibraryFrameTwo kioskFrameTwo = new LibraryFrameTwo();
-					kioskFrameTwo.setVisible(true);
-					kioskFrameOne.setVisible(false)
-					
-				}
-			}
-		});
-		**/
 	
+	/**
+	 * Refreshes the search result display list with current query and type whenever called
+	 */
+	public void refreshSearchResults() {
+		listModel.clear();
+		searchQuery = txtSearch.getText();
+		searchingLibrary = workingLibrary.searchBooks(searchQuery, searchType);
+		for (Book book : searchingLibrary) {
+			listModel.addElement(book.getData());
+		}
+	}
+}
