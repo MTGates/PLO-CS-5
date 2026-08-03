@@ -1,7 +1,6 @@
 package librarykiosk;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -16,6 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.awt.Rectangle;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
+import javax.swing.JComboBox;
 
 /**
  * @author - Morgan Fidler
@@ -56,7 +58,8 @@ public class KioskApp extends JFrame {
 	private DefaultListModel<String> listModel = new DefaultListModel<>();
 	private JList<String> resultsList;
 	private String searchQuery = "";
-	private SearchTypes searchType = SearchTypes.TITLE; // TODO: Implement switching between search types
+	private SearchTypes searchType = SearchTypes.TITLE;
+	private final JComboBox<SearchTypes> comboBox = new JComboBox<>(SearchTypes.values());
 	
 	private JPanel panelBookInfo = new JPanel();
 	private final JPanel panelBIDisplayInfo = new JPanel();
@@ -202,7 +205,7 @@ public class KioskApp extends JFrame {
 		txtSearch.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtSearch.setColumns(26);
 		txtSearch.setBorder(new LineBorder(new Color(0, 0, 0), 3));
-		txtSearch.setBorder(new EmptyBorder(10, 20, 10, 160));
+		txtSearch.setBorder(new EmptyBorder(10, 20, 10, 100));
 		panelSCActions.add(txtSearch);
 		
 		// Creates, constraints, and adds the initiate query button
@@ -232,6 +235,12 @@ public class KioskApp extends JFrame {
 			}
 		});
 		panelSCActions.add(btnSCBackVI);
+		
+		// Creates, constraints, and adds the Search Type dropbox
+		comboBox.addActionListener(e -> {
+			searchType = (SearchTypes) comboBox.getSelectedItem();
+		});
+		panelSCActions.add(comboBox);
 		
 		return panelSearchCatalog;
 	}

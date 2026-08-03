@@ -6,5 +6,5 @@ package librarykiosk;
 public enum SearchTypes {
 	TITLE,
 	AUTHOR,
-	DESCRIPTION;
+	KEYWORD;
 }
