@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 /**
  * @author - Morgan Fidler
  * This is a popup frame for use with KioskApp.java to validate employee credentials before altering the status of a book.
+ * This is the only surviving frame from a very poor attempt at GUI design. Therefore, the structure may differ slightly from the rest of the frames in KioskApp. You've been informed.
  */
 public class KioskAuthPopup extends JFrame {
 
