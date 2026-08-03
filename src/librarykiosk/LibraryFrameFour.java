@@ -1,4 +1,4 @@
-package libraryJFrame;
+package librarykiosk;
 
 import java.awt.EventQueue;
 import java.awt.Dimension;

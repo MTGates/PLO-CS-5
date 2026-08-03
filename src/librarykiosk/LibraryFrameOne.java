@@ -1,4 +1,4 @@
-package libraryJFrame;
+package librarykiosk;
 
 import java.awt.BorderLayout;
 
@@ -44,6 +44,8 @@ public class LibraryFrameOne extends JFrame {
 	 */
 	public LibraryFrameOne() {
 		baseFrameOne();
+		
+		lblPleaseID();
 	}
 
 	private void baseFrameOne() {
@@ -59,7 +61,6 @@ public class LibraryFrameOne extends JFrame {
 		// Creates the enter button, the password box, and the label, in that order.
 		JButton btnEnterID = btnEnter(panelTextButton, sl_panelTextButton);
 		passwordFieldS1(panelTextButton, sl_panelTextButton, btnEnterID);
-		lblPleaseID();
 	}
 
 	private void lblPleaseID() {
