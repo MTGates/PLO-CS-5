@@ -205,8 +205,7 @@ public class Library {
     	/*
     	 * Mark the selected book as available again.
     	 */
-    	
-    	book.returnBook();
+        book.returnBook();
     	saveBooks();
     }
     

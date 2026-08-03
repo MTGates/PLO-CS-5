@@ -157,10 +157,7 @@ public class KioskAuthPopup extends JFrame {
 					txtKAPassField.setBackground(new Color(255, 0, 0));
 				}
 				else if (compareEmployeeID(txtKAPassField.getPassword())) { 
-					if (kioskApp.checkoutOrReturn01 == 0) {
-						kioskApp.workingLibrary.checkoutBook(kioskApp.searchingLibrary.get(kioskApp.selectedBookId));
-					}
-					else kioskApp.workingLibrary.returnBook(kioskApp.searchingLibrary.get(kioskApp.selectedBookId));
+					initiateCheckOrReturn();
 					dispose();
 				}
 				else {
@@ -180,6 +177,7 @@ public class KioskAuthPopup extends JFrame {
 		btnKAClose.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				txtKAPassField.setText("");
 				dispose();
 			}
 		});
@@ -196,10 +194,25 @@ public class KioskAuthPopup extends JFrame {
 		Employee tempEmployee = new Employee(validationInteger, "name");
 
 		if (tempEmployee.authorize()) {
-			kioskApp.setAuthorized(true);
 			return true;
 		}
 		return false;
 		// TODO: Implement error handling
+	}
+	
+	/**
+	 * Determines whether we're using the checkout or the return process
+	 */
+	public void initiateCheckOrReturn() {
+		if (kioskApp.checkoutOrReturn01 == 0) {
+			kioskApp.workingLibrary.checkoutBook(kioskApp.searchingLibrary.get(kioskApp.selectedBookId));
+		}
+		else {
+			kioskApp.workingLibrary.returnBook(kioskApp.searchingLibrary.get(kioskApp.selectedBookId));
+		}
+		kioskApp.refreshSearchResults();
+		kioskApp.panelSearchCatalog.setVisible(true);
+		kioskApp.panelBookInfo.setVisible(false);
+		txtKAPassField.setText("");
 	}
 }

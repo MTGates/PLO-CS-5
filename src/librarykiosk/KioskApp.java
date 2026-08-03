@@ -15,8 +15,6 @@ import javax.swing.SwingConstants;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -48,7 +46,7 @@ public class KioskApp extends JFrame {
 	private final JPasswordField txtVIPassBox = new JPasswordField();
 	private final JButton btnVIEnterId = new JButton("Enter ->");
 	
-	private JPanel panelSearchCatalog = new JPanel();
+	public JPanel panelSearchCatalog = new JPanel();
 	private final JScrollPane scrollPane = new JScrollPane();
 	public int selectedBookId = 0;
 	private final JPanel panelSCActions = new JPanel();
@@ -61,18 +59,19 @@ public class KioskApp extends JFrame {
 	private SearchTypes searchType = SearchTypes.TITLE;
 	private final JComboBox<SearchTypes> comboBox = new JComboBox<>(SearchTypes.values());
 	
-	private JPanel panelBookInfo = new JPanel();
+	public JPanel panelBookInfo = new JPanel();
 	private final JPanel panelBIDisplayInfo = new JPanel();
 	private final JPanel panelBIActions = new JPanel();
 	private final JButton btnCheckout = new JButton("Checkout");
 	private final JButton btnReturn = new JButton("Return");
-	private boolean authorized = false;
+	private KioskAuthPopup authPop;
 	private final JButton btnBIBackSC = new JButton("<-");
 	private final JTextArea txtScrollPane = new JTextArea();
 	
 	public Library workingLibrary = new Library();
 	ArrayList<Book> searchingLibrary = workingLibrary.getBooks();
 	int checkoutOrReturn01 = 0;
+	Person currentPerson;
 
 	/**
 	 * Launch the application.
@@ -225,7 +224,7 @@ public class KioskApp extends JFrame {
 		btnSCBackVI.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				authorized = false;
+				currentPerson = null;
 				panelValidateUser.setVisible(true);
 				panelSearchCatalog.setVisible(false);
 				txtSearch.setText("");
@@ -275,16 +274,13 @@ public class KioskApp extends JFrame {
 		btnCheckout.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (!authorized) {
-					KioskAuthPopup authPop = new KioskAuthPopup(KioskApp.this);
-					authPop.setVisible(true);
-					checkoutOrReturn01 = 0;
-				}
-				else {
-					workingLibrary.checkoutBook(searchingLibrary.get(selectedBookId));
-					panelSearchCatalog.setVisible(true);
-					panelBookInfo.setVisible(false);
-				}
+			checkoutOrReturn01 = 0;
+			authPop = new KioskAuthPopup(KioskApp.this);
+			if (isEmployee(currentPerson)) {
+			    authPop.initiateCheckOrReturn();
+			} else {
+			    authPop.setVisible(true);
+			}
 			}
 		});
 		panelBIActions.add(btnCheckout);
@@ -295,16 +291,13 @@ public class KioskApp extends JFrame {
 		btnReturn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (!authorized) {
-					checkoutOrReturn01 = 1;
-					KioskAuthPopup authPop = new KioskAuthPopup(KioskApp.this);
-					authPop.setVisible(true);
-				}
-				else {
-					workingLibrary.checkoutBook(searchingLibrary.get(selectedBookId));
-					panelSearchCatalog.setVisible(true);
-					panelBookInfo.setVisible(false);
-				}
+			checkoutOrReturn01 = 1;
+			authPop = new KioskAuthPopup(KioskApp.this);
+			if (isEmployee(currentPerson)) {
+			    authPop.initiateCheckOrReturn();
+			} else {
+			    authPop.setVisible(true);
+			}
 			}
 		});
 		panelBIActions.add(btnReturn);
@@ -334,10 +327,11 @@ public class KioskApp extends JFrame {
 		Employee tempEmployee = new Employee(validationInteger, "name");
 		
 		if (tempUser.validateId()) {
+			currentPerson = new User(validationInteger, "User");
 			return true;
 		};
 		if (tempEmployee.authorize()) {
-			authorized = true;
+			currentPerson = new Employee(validationInteger, "Employee");
 			return true;
 		}
 		return false;
@@ -372,7 +366,7 @@ public class KioskApp extends JFrame {
 	/**
 	 * @param boolean - Sets authorization status
 	 */
-	public void setAuthorized(boolean authorized) {
-		this.authorized = authorized;
+	public boolean isEmployee(Person currentPerson) {
+		return currentPerson instanceof Employee;
 	}
 }

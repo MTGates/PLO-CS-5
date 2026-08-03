@@ -1,7 +1,7 @@
 bookId|title|author|publishYear|genre|available
-B0001|Pride and Prejudice|Austen, Jane|1813|Romance|true
-B0002|The Yellow Wallpaper|Gilman, Charlotte Perkins|1892|Horror|true
-B0003|Alice's Adventures in Wonderland|Carroll, Lewis|1865|Fantasy|true
+B0001|Pride and Prejudice|Austen, Jane|1813|Romance|false
+B0002|The Yellow Wallpaper|Gilman, Charlotte Perkins|1892|Horror|false
+B0003|Alice's Adventures in Wonderland|Carroll, Lewis|1865|Fantasy|false
 B0004|Frankenstein; Or, The Modern Prometheus|Shelley, Mary Wollstonecraft|1818|Science Fiction|true
 B0005|Metamorphosis|Kafka, Franz|1915|Horror|true
 B0006|Adventures of Huckleberry Finn|Twain, Mark|1884|Historical Fiction|true
