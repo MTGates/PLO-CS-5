@@ -364,7 +364,8 @@ public class KioskApp extends JFrame {
 	}
 	
 	/**
-	 * @param boolean - Sets authorization status
+	 * @param Person - determines authorization status of the given Person (are they subclass User or Employee?)
+	 * TODO: Move this to Person/Employee w/ polymorphism so the GUI code can remain as separate as possible
 	 */
 	public boolean isEmployee(Person currentPerson) {
 		return currentPerson instanceof Employee;
