@@ -51,43 +51,31 @@ public class Library {
      * Clears the current list before loading.
      */
     public void refreshBooks() {
-
         books.clear();
-
         File file = new File(BOOK_FILE);
-
         if (!file.exists()) {
             System.out.println("Book file could not be found.");
             return;
         }
 
         try (Scanner input = new Scanner(file)) {
-
             // Skip the header row of the text file.
             if (input.hasNextLine()) {
                 input.nextLine();
             }
-
             while (input.hasNextLine()) {
-
                 String line = input.nextLine();
 
                 if (!line.trim().isEmpty()) {
-
                     Book book = createBookFromLine(line);
-
                     if (book != null) {
                         books.add(book);
                     }
                 }
             }
-
         } catch (FileNotFoundException e) {
-
         	System.out.println("Unable to open books.txt: " + e.getMessage());
-        	
         }
-
     }
     
     /**
@@ -137,23 +125,24 @@ public class Library {
     * @param type selected search category
     * @return matching books
     */
-    public ArrayList<Book> searchBooks(String query, String type) {
+    public ArrayList<Book> searchBooks(String query, SearchTypes type) {
         ArrayList<Book> results = new ArrayList<>();
         	
-        if (query == null || query.trim().isEmpty()) {
+        if (query == null) {
         	return results;
         }
-        	
+        else if (query.trim().isEmpty()) {
+        	for (Book book : books) {
+        		results.add(book);
+        	}
+        }
         query = query.toLowerCase().trim();
-        	
         for (Book book : books) {
         	if (matchesSearch(book, query, type)) {
         			results.add(book);
         		}
         	}
-        	
         return results;
-        	
     }        
     
     /**
@@ -161,7 +150,7 @@ public class Library {
      *
      * Uses the Book getters to compare search values.
      */
-    private boolean matchesSearch(Book book, String query, String type) {
+    private boolean matchesSearch(Book book, String query, SearchTypes type) {
     	
     	String id = book.getBookId().toLowerCase();
     	String title = book.getTitle().toLowerCase();
@@ -169,11 +158,11 @@ public class Library {
     	String year = book.getPublishDate().toLowerCase();
     	String genre = book.getGenre().toLowerCase();
     	
-    	if (type.equalsIgnoreCase("Author")) {
+    	if (type.equals(SearchTypes.AUTHOR)) {
     		return author.contains(query);
     	}
     	
-    	if (type.equalsIgnoreCase("Title")) {
+    	if (type.equals(SearchTypes.TITLE)) {
     		return title.contains(query);
     	}
     	
