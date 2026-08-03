@@ -48,7 +48,7 @@ public class KioskApp extends JFrame {
 	
 	private JPanel panelSearchCatalog = new JPanel();
 	private final JScrollPane scrollPane = new JScrollPane();
-	private int selectedBookId = 0;
+	public int selectedBookId = 0;
 	private final JPanel panelSCActions = new JPanel();
 	private final JTextField txtSearch = new JTextField();
 	private final JButton btnSCBackVI = new JButton("<-");
@@ -56,18 +56,20 @@ public class KioskApp extends JFrame {
 	private DefaultListModel<String> listModel = new DefaultListModel<>();
 	private JList<String> resultsList;
 	private String searchQuery = "";
-	private SearchTypes searchType = SearchTypes.TITLE;
+	private SearchTypes searchType = SearchTypes.TITLE; // TODO: Implement switching between search types
 	
 	private JPanel panelBookInfo = new JPanel();
 	private final JPanel panelBIDisplayInfo = new JPanel();
 	private final JPanel panelBIActions = new JPanel();
 	private final JButton btnCheckout = new JButton("Checkout");
 	private final JButton btnReturn = new JButton("Return");
+	private boolean authorized = false;
 	private final JButton btnBIBackSC = new JButton("<-");
 	private final JTextArea txtScrollPane = new JTextArea();
 	
 	public Library workingLibrary = new Library();
 	ArrayList<Book> searchingLibrary = workingLibrary.getBooks();
+	int checkoutOrReturn01 = 0;
 
 	/**
 	 * Launch the application.
@@ -153,7 +155,7 @@ public class KioskApp extends JFrame {
 				if (txtVIPassBox.getPassword().length == 0) {
 					lblVIPleaseId.setBackground(new Color(255, 0, 0));
 				}
-				else if (compareID(txtVIPassBox.getPassword())) { // TODO: Bug here: null inputs cause an error and do not turn the label background red
+				else if (compareID(txtVIPassBox.getPassword())) {
 					panelSearchCatalog.setVisible(true);
 					panelValidateUser.setVisible(false);
 				}
@@ -220,6 +222,7 @@ public class KioskApp extends JFrame {
 		btnSCBackVI.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				authorized = false;
 				panelValidateUser.setVisible(true);
 				panelSearchCatalog.setVisible(false);
 				txtSearch.setText("");
@@ -253,11 +256,49 @@ public class KioskApp extends JFrame {
 		txtScrollPane.setEditable(false);
 		panelBIDisplayInfo.add(txtScrollPane, BorderLayout.NORTH); // Adds the display list to the subpanel
 		
+		// Constraints and adds the subpanel for the buttons
+				panelBookInfo.add(panelBIActions, BorderLayout.SOUTH);
+				panelBIActions.setLayout(new GridLayout(0, 3, 0, 0));
+		
 		// Constraints and adds the Checkout button to the subpanel
-		panelBIActions.add(btnCheckout); // TODO: Implement functionality
+		btnCheckout.setHorizontalAlignment(SwingConstants.CENTER);
+		btnCheckout.setFont(new Font("Arial", Font.BOLD, 14));
+		btnCheckout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!authorized) {
+					KioskAuthPopup authPop = new KioskAuthPopup(KioskApp.this);
+					authPop.setVisible(true);
+					checkoutOrReturn01 = 0;
+				}
+				else {
+					workingLibrary.checkoutBook(searchingLibrary.get(selectedBookId));
+					panelSearchCatalog.setVisible(true);
+					panelBookInfo.setVisible(false);
+				}
+			}
+		});
+		panelBIActions.add(btnCheckout);
 		
 		// Constraints and adds the Return-book button to the subpanel
-		panelBIActions.add(btnReturn); // TODO: Implement functionality
+		btnReturn.setHorizontalAlignment(SwingConstants.CENTER);
+		btnReturn.setFont(new Font("Arial", Font.BOLD, 14));
+		btnReturn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (!authorized) {
+					checkoutOrReturn01 = 1;
+					KioskAuthPopup authPop = new KioskAuthPopup(KioskApp.this);
+					authPop.setVisible(true);
+				}
+				else {
+					workingLibrary.checkoutBook(searchingLibrary.get(selectedBookId));
+					panelSearchCatalog.setVisible(true);
+					panelBookInfo.setVisible(false);
+				}
+			}
+		});
+		panelBIActions.add(btnReturn);
 		
 		// Constraints and adds the return to last screen button to the subpanel
 		btnBIBackSC.addMouseListener(new MouseAdapter() {
@@ -270,29 +311,34 @@ public class KioskApp extends JFrame {
 		btnBIBackSC.setPreferredSize(new Dimension(50, 35));
 		panelBIActions.add(btnBIBackSC);
 		
-		
-		// Constraints and adds the subpanel for the buttons
-		panelBookInfo.add(panelBIActions, BorderLayout.SOUTH);
-		panelBIActions.setLayout(new GridLayout(0, 3, 0, 0));
-		btnCheckout.setPreferredSize(new Dimension(50, 35));
-		btnCheckout.setHorizontalAlignment(SwingConstants.CENTER);
-		btnCheckout.setFont(new Font("Arial", Font.PLAIN, 8));
-		
 		return panelBookInfo;
 	}
 	
+	/**
+	 * @param validationArray - Takes in a char[] based on the input provided in the txtVIPassBox and collected by an event handler to compare with known hard-coded IDs
+	 * @return boolean - Returns true if a match is found in hardcoded IDs in either User or Employee
+	 */
 	public boolean compareID(char[] validationArray) {
 		String validationString = new String(validationArray);
 		Integer validationInteger = Integer.parseInt(validationString);
 		User tempUser = new User(validationInteger, "name");
+		Employee tempEmployee = new Employee(validationInteger, "name");
 		
 		if (tempUser.validateId()) {
 			return true;
 		};
+		if (tempEmployee.authorize()) {
+			authorized = true;
+			return true;
+		}
 		return false;
 		// TODO: Implement error handling
 	}
 
+	/**
+	 * @param tempBookArray - Takes an ArrayList of Books to allow for functionality to apply to many different lists if needed.
+	 * @return String - Provides a detailed description to display in the ScrollPane
+	 */
 	public String refreshBookInfoBI(ArrayList<Book> tempBookArray) {
 		if (selectedBookId >= 0 && selectedBookId < tempBookArray.size() && tempBookArray.get(selectedBookId) != null) {
 			Book tempBook = tempBookArray.get(selectedBookId);
@@ -312,5 +358,12 @@ public class KioskApp extends JFrame {
 		for (Book book : searchingLibrary) {
 			listModel.addElement(book.getData());
 		}
+	}
+	
+	/**
+	 * @param boolean - Sets authorization status
+	 */
+	public void setAuthorized(boolean authorized) {
+		this.authorized = authorized;
 	}
 }
