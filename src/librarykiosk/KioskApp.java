@@ -186,10 +186,20 @@ public class KioskApp extends JFrame {
 		refreshSearchResults(); // Refreshes the data in listModel
 		resultsList = new JList<>(listModel);
 		scrollPane.setViewportView(resultsList);
+		
 		resultsList.addListSelectionListener(e -> {
 			if (resultsList.getSelectedIndex() != -1) {
+				
 		        selectedBookId = resultsList.getSelectedIndex();
+		        
 		        txtScrollPane.setText(refreshBookInfoBI(searchingLibrary));
+		        
+		        // Update the Checkout and Return buttons based on the selected book's availability.
+		        Book selectedBook = searchingLibrary.get(selectedBookId);
+		        
+		        btnCheckout.setEnabled(selectedBook.isAvailable());
+		        btnReturn.setEnabled(!selectedBook.isAvailable());
+		        
 		        panelBookInfo.setVisible(true);
 		        panelSearchCatalog.setVisible(false);
 		    }
