@@ -42,7 +42,7 @@ public class LibraryFrameFour extends JFrame {
 			public void run() {
 				try {
 					LibraryFrameFour frame = new LibraryFrameFour();
-					frame.setVisible(true);
+					frame.setVisible(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -95,6 +95,7 @@ public class LibraryFrameFour extends JFrame {
 		txtID.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtID.setBorder(new LineBorder(Color.BLACK, 1));
 		txtID.setBackground(Color.WHITE);
+		txtID.setEchoChar('*');
 
 		panelSearch.add(txtID, BorderLayout.CENTER);
 	}

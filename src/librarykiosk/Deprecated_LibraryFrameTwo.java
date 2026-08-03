@@ -22,7 +22,7 @@ import javax.swing.DefaultListModel;
  */
 // TODO: missing logical implementation
 
-public class LibraryFrameTwo extends JFrame {
+public class Deprecated_LibraryFrameTwo extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -41,7 +41,7 @@ public class LibraryFrameTwo extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LibraryFrameTwo frame = new LibraryFrameTwo();
+					Deprecated_LibraryFrameTwo frame = new Deprecated_LibraryFrameTwo();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,7 +53,7 @@ public class LibraryFrameTwo extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LibraryFrameTwo() {
+	public Deprecated_LibraryFrameTwo() {
 		baseFrameS2();
 		searchResultsList();
 		// Search panel with text field, return, and query buttons

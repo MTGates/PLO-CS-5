@@ -18,7 +18,7 @@ import javax.swing.JTextArea;
 */
 //TODO: missing logical implementation
 
-public class LibraryFrameThree extends JFrame {
+public class Deprecated_LibraryFrameThree extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -31,8 +31,8 @@ public class LibraryFrameThree extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LibraryFrameThree frame = new LibraryFrameThree();
-					frame.setVisible(true);
+					Deprecated_LibraryFrameThree frame = new Deprecated_LibraryFrameThree();
+					frame.setVisible(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -43,7 +43,7 @@ public class LibraryFrameThree extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LibraryFrameThree() {
+	public Deprecated_LibraryFrameThree() {
 		createBaseFrameS3();
 		
 		JPanel panelInfo = createTextFrame();

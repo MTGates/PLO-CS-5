@@ -43,7 +43,7 @@ public class Book {
 			bookStatus = "Checked Out";
 		}
 		
-		return "[ID#: " + bookId + "] " + title + " by " + author + " (" + publishDate + ") - " + bookStatus; 
+		return "[ID#: " + bookId + "] " + title + ", by " + author + ". (" + publishDate + ") - " + bookStatus; 
 	
 	}
 	

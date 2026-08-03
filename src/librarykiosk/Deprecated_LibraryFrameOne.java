@@ -12,16 +12,23 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.SpringLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @author Morgan Fidler
  */
 //TODO: missing logical implementation
 
-public class LibraryFrameOne extends JFrame {
+public class Deprecated_LibraryFrameOne extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPasswordField passwordField;
+	
+	// Declares all fields for the GUI for continual reference after initialization
+	JPanel panelTextButton = new JPanel();
+	JLabel lblPleaseID = new JLabel("Please enter your Library ID # and Name");
+	JButton btnEnterID = new JButton("Enter ->");
 
 	/**
 	 * Launch the application.
@@ -30,7 +37,7 @@ public class LibraryFrameOne extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LibraryFrameOne frame = new LibraryFrameOne();
+					Deprecated_LibraryFrameOne frame = new Deprecated_LibraryFrameOne();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -42,7 +49,7 @@ public class LibraryFrameOne extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LibraryFrameOne() {
+	public Deprecated_LibraryFrameOne() {
 		baseFrameOne();
 		
 		lblPleaseID();
@@ -54,7 +61,6 @@ public class LibraryFrameOne extends JFrame {
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		// Creates a subframe that contains the password box and an enter button
-		JPanel panelTextButton = new JPanel();
 		getContentPane().add(panelTextButton, BorderLayout.CENTER);
 		SpringLayout sl_panelTextButton = new SpringLayout();
 		panelTextButton.setLayout(sl_panelTextButton);
@@ -64,18 +70,28 @@ public class LibraryFrameOne extends JFrame {
 	}
 
 	private void lblPleaseID() {
-		JLabel lblPleaseID = new JLabel("Please enter your Library ID #");
 		lblPleaseID.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPleaseID.setFont(new Font("Arial", Font.BOLD, 24));
+		lblPleaseID.setFont(new Font("Arial", Font.BOLD, 20));
 		getContentPane().add(lblPleaseID, BorderLayout.NORTH);
 		lblPleaseID.setBorder(new EmptyBorder(12, 20, 12, 20));
 	}
 
 	private JButton btnEnter(JPanel panelTextButton, SpringLayout sl_panelTextButton) {
-		JButton btnEnterID = new JButton("Enter ->");
 		sl_panelTextButton.putConstraint(SpringLayout.WEST, btnEnterID, 150, SpringLayout.WEST, panelTextButton);
 		sl_panelTextButton.putConstraint(SpringLayout.SOUTH, btnEnterID, -10, SpringLayout.SOUTH, panelTextButton);
 		sl_panelTextButton.putConstraint(SpringLayout.EAST, btnEnterID, -149, SpringLayout.EAST, panelTextButton);
+		btnEnterID.addMouseListener(new MouseAdapter() {
+			// The compareID() method uses the current data in the passwordField to validate
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(compareID()) {
+					Deprecated_LibraryFrameOne kioskFrameOne = new Deprecated_LibraryFrameOne();
+					Deprecated_LibraryFrameTwo kioskFrameTwo = new Deprecated_LibraryFrameTwo();
+					kioskFrameTwo.setVisible(true);
+					kioskFrameOne.setVisible(false);
+				}
+			}
+		});
 		btnEnterID.setFont(new Font("Arial", Font.BOLD, 12));
 		panelTextButton.add(btnEnterID);
 		return btnEnterID;
@@ -90,5 +106,28 @@ public class LibraryFrameOne extends JFrame {
 		passwordField.setFont(new Font("Arial", Font.BOLD, 14));
 		passwordField.setEchoChar('*');
 		panelTextButton.add(passwordField);
+	}
+	
+	/**
+	 * @return - true if ID matches with an existing user, false if not, error if not an int
+	 * @param - 
+	 * Validates the ID by creating a temporary user object with the given ID # in passwordField and returns true if the
+	 * User class method validateID() returns true
+	 */
+	public boolean compareID() {
+		
+		char[] validationArray = passwordField.getPassword();
+		String validationString = new String(validationArray);
+		Integer validationInteger = Integer.parseInt(validationString);
+		
+		User tempUser = new User(validationInteger, "name");
+		
+		if (tempUser.validateId()) {
+			return true;
+		};
+		
+		return false;
+
+		// TODO: Implement error handling
 	}
 }
