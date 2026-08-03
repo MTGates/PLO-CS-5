@@ -27,6 +27,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
 
 /**
  * @author - Morgan Fidler
@@ -52,7 +53,7 @@ public class KioskApp extends JFrame {
 	private final JPanel panelSCActions = new JPanel();
 	private final JTextField txtSearch = new JTextField();
 	private final JButton btnSCBackVI = new JButton("<-");
-	private final JButton btnSCQuery = new JButton("Q");
+	private final JButton btnSCQuery = new JButton("");
 	private DefaultListModel<String> listModel = new DefaultListModel<>();
 	private JList<String> resultsList;
 	private String searchQuery = "";
@@ -207,17 +208,6 @@ public class KioskApp extends JFrame {
 		txtSearch.setBorder(new EmptyBorder(10, 20, 10, 100));
 		panelSCActions.add(txtSearch);
 		
-		// Creates, constraints, and adds the initiate query button
-		btnSCQuery.setHorizontalAlignment(SwingConstants.RIGHT);
-		btnSCQuery.setFont(new Font("Arial", Font.PLAIN, 14));
-		btnSCQuery.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				refreshSearchResults();
-			}
-		});
-		panelSCActions.add(btnSCQuery);
-		
 		// Creates, constraints, and adds the return to VI frame button
 		btnSCBackVI.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnSCBackVI.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -233,6 +223,18 @@ public class KioskApp extends JFrame {
 				lblVIPleaseId.setBackground(new Color(240, 240, 240));
 			}
 		});
+		btnSCQuery.setIcon(new ImageIcon("/Users/tybride/Downloads/search_icon.jpg"));
+		
+		// Creates, constraints, and adds the initiate query button
+		btnSCQuery.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnSCQuery.setFont(new Font("Arial", Font.PLAIN, 14));
+		btnSCQuery.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				refreshSearchResults();
+			}
+		});
+		panelSCActions.add(btnSCQuery);
 		panelSCActions.add(btnSCBackVI);
 		
 		// Creates, constraints, and adds the Search Type dropbox
