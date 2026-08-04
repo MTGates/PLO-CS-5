@@ -215,7 +215,7 @@ public class KioskApp extends JFrame {
 		txtSearch.setFont(new Font("Arial", Font.PLAIN, 14));
 		txtSearch.setColumns(26);
 		txtSearch.setBorder(new LineBorder(new Color(0, 0, 0), 3));
-		txtSearch.setBorder(new EmptyBorder(10, 20, 10, 100));
+		txtSearch.setBorder(new EmptyBorder(10, 20, 10, 80));
 		panelSCActions.add(txtSearch);
 		
 		// Creates, constraints, and adds the return to VI frame button
@@ -365,8 +365,8 @@ public class KioskApp extends JFrame {
 	public String refreshBookInfoBI(ArrayList<Book> tempBookArray) {
 		if (selectedBookId >= 0 && selectedBookId < tempBookArray.size() && tempBookArray.get(selectedBookId) != null) {
 			Book tempBook = tempBookArray.get(selectedBookId);
-			return String.format("%s - written by %s, published %s. \n\nThe quick brown fox jumps over the lazy dog - Sphinx of black quartz, judge my vow.", tempBook.getTitle(), tempBook.getAuthor(), tempBook.getPublishDate());
-			// TODO : Find a way to implement the book descriptions, if we deem it necessary
+			return String.format("%s - written by %s, published %s. \n\n%s", 
+					tempBook.getTitle(), tempBook.getAuthor(), tempBook.getPublishDate(), tempBook.getDescription());
 		}
 		else return "Index Out of Bounds or other error has occurred, we apologize for the inconvenience.";
 	}

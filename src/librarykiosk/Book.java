@@ -9,16 +9,16 @@ public class Book {
 	private String author;
 	private String bookId;
 	private String publishDate;
-	private String genre;
+	private String description;
 	private boolean available;
 	
 	public Book(String title, String author, String bookId, String publishDate,
-			String genre, boolean available) {
+			String description, boolean available) {
 		this.title = title;
 		this.author = author;
 		this.bookId = bookId;
 		this.publishDate = publishDate;
-		this.genre = genre;
+		this.description = description;
 		this.available = available;
 	}
 	
@@ -57,8 +57,8 @@ public class Book {
 		return author;
 	}
 	
-	public String getGenre() {
-		return genre;
+	public String getDescription() {
+		return description;
 	}
 	
 	public String getPublishDate() {

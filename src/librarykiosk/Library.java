@@ -156,7 +156,7 @@ public class Library {
     	String title = book.getTitle().toLowerCase();
     	String author = book.getAuthor().toLowerCase();
     	String year = book.getPublishDate().toLowerCase();
-    	String genre = book.getGenre().toLowerCase();
+    	String genre = book.getDescription().toLowerCase();
     	
     	if (type.equals(SearchTypes.AUTHOR)) {
     		return author.contains(query);
@@ -249,7 +249,7 @@ public class Library {
     			+ book.getTitle() + "|"
     			+ book.getAuthor() + "|"
     			+ book.getPublishDate() + "|"
-    			+ book.getGenre() + "|"
+    			+ book.getDescription() + "|"
     			+ book.isAvailable();
     }
     
