@@ -6,7 +6,7 @@ B0004|Frankenstein; Or, The Modern Prometheus|Shelley, Mary Wollstonecraft|1818|
 B0005|Metamorphosis|Kafka, Franz|1915|After awakening transformed into a gigantic insect, a traveling salesman watches his family relationships and identity unravel. Genre: Horror|false
 B0006|Adventures of Huckleberry Finn|Twain, Mark|1884|A restless boy escapes down the Mississippi River with a runaway slave, confronting freedom, friendship, and morality. Genre: Historical Fiction|true
 B0007|The Importance of Being Earnest: A Trivial Comedy for Serious People|Wilde, Oscar|1895|Two men invent false identities to avoid obligations, only to find themselves trapped in a web of mistaken identities and romance. Genre: Romance|true
-B0008|The Adventures of Tom Sawyer|Twain, Mark|1876|An adventurous boy spends his days chasing treasure, dodging trouble, and growing up along the Mississippi River. Genre: Historical Fiction|true
+B0008|The Adventures of Tom Sawyer|Twain, Mark|1876|An adventurous boy spends his days chasing treasure, dodging trouble, and growing up along the Mississippi River. Genre: Historical Fiction|false
 B0009|Narrative of the Life of Frederick Douglass, an American Slave|Douglass, Frederick|1845|A firsthand account recounts the brutality of slavery, the pursuit of literacy, and the determined struggle for freedom. Genre: History|true
 B0010|A Doll's House : a play|Ibsen, Henrik|1879|A wife questions the role society has assigned her, forcing a confrontation over marriage, independence, and personal identity. Genre: Fiction|true
 B0011|Moby Dick; Or, The Whale|Melville, Herman|1851|The story follows central characters as they face conflicts, make difficult choices, and are transformed by the consequences of their actions. Genre: Historical Fiction|true

@@ -31,7 +31,7 @@ import javax.swing.ImageIcon;
 
 /**
  * @author - Morgan Fidler
- * This class controls 3 (possibly 4 later on) JFrames and their logical implementation and how they interact with the other classes to form the Kiosk system.
+ * This class controls 3 JFrames and their logical implementation and how they interact with the other classes to form the Kiosk system.
  */
 public class KioskApp extends JFrame {
 
