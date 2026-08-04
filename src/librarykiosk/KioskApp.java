@@ -233,7 +233,8 @@ public class KioskApp extends JFrame {
 				lblVIPleaseId.setBackground(new Color(240, 240, 240));
 			}
 		});
-		btnSCQuery.setIcon(new ImageIcon("/Users/tybride/Downloads/search_icon.jpg"));
+		btnSCQuery.setIcon(new ImageIcon(
+		        KioskApp.class.getResource("/img/search_icon.jpg")));
 		
 		// Creates, constraints, and adds the initiate query button
 		btnSCQuery.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -334,20 +335,27 @@ public class KioskApp extends JFrame {
 	 */
 	public boolean compareID(char[] validationArray) {
 		String validationString = new String(validationArray);
-		Integer validationInteger = Integer.parseInt(validationString);
-		User tempUser = new User(validationInteger, "name");
-		Employee tempEmployee = new Employee(validationInteger, "name");
-		
-		if (tempUser.validateId()) {
-			currentPerson = new User(validationInteger, "User");
-			return true;
-		};
-		if (tempEmployee.authorize()) {
-			currentPerson = new Employee(validationInteger, "Employee");
-			return true;
+		try {
+		    Integer validationInteger = Integer.parseInt(validationString);
+
+		    User tempUser = new User(validationInteger, "name");
+		    Employee tempEmployee = new Employee(validationInteger, "name");
+
+		    if (tempUser.validateId()) {
+		        currentPerson = new User(validationInteger, "User");
+		        return true;
+		    }
+
+		    if (tempEmployee.authorize()) {
+		        currentPerson = new Employee(validationInteger, "Employee");
+		        return true;
+		    }
+
+		} catch (NumberFormatException e) {
+		    lblVIPleaseId.setBackground(Color.RED);
 		}
+
 		return false;
-		// TODO: Implement error handling
 	}
 
 	/**
