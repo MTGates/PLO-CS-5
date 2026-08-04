@@ -1,10 +1,10 @@
 bookId|title|author|publishYear|genre|available
-B0001|Pride and Prejudice|Austen, Jane|1813|A witty young woman navigates family expectations, social class, and misunderstandings as her opinions about love and character evolve. Genre: Romance|false
+B0001|Pride and Prejudice|Austen, Jane|1813|A witty young woman navigates family expectations, social class, and misunderstandings as her opinions about love and character evolve. Genre: Romance|true
 B0002|The Yellow Wallpaper|Gilman, Charlotte Perkins|1892|Confined to a secluded room for treatment, a woman's growing fixation on the wallpaper mirrors her descent into psychological instability. Genre: Horror|false
-B0003|Alice's Adventures in Wonderland|Carroll, Lewis|1865|A curious girl falls into a dreamlike world where logic is turned upside down and every encounter grows stranger than the last. Genre: Fantasy|true
+B0003|Alice's Adventures in Wonderland|Carroll, Lewis|1865|A curious girl falls into a dreamlike world where logic is turned upside down and every encounter grows stranger than the last. Genre: Fantasy|false
 B0004|Frankenstein; Or, The Modern Prometheus|Shelley, Mary Wollstonecraft|1818|A scientist's obsession with creating life unleashes tragedy when his abandoned creation seeks acceptance and revenge. Genre: Science Fiction|true
 B0005|Metamorphosis|Kafka, Franz|1915|After awakening transformed into a gigantic insect, a traveling salesman watches his family relationships and identity unravel. Genre: Horror|false
-B0006|Adventures of Huckleberry Finn|Twain, Mark|1884|A restless boy escapes down the Mississippi River with a runaway slave, confronting freedom, friendship, and morality. Genre: Historical Fiction|true
+B0006|Adventures of Huckleberry Finn|Twain, Mark|1884|A restless boy escapes down the Mississippi River with a runaway slave, confronting freedom, friendship, and morality. Genre: Historical Fiction|false
 B0007|The Importance of Being Earnest: A Trivial Comedy for Serious People|Wilde, Oscar|1895|Two men invent false identities to avoid obligations, only to find themselves trapped in a web of mistaken identities and romance. Genre: Romance|true
 B0008|The Adventures of Tom Sawyer|Twain, Mark|1876|An adventurous boy spends his days chasing treasure, dodging trouble, and growing up along the Mississippi River. Genre: Historical Fiction|false
 B0009|Narrative of the Life of Frederick Douglass, an American Slave|Douglass, Frederick|1845|A firsthand account recounts the brutality of slavery, the pursuit of literacy, and the determined struggle for freedom. Genre: History|true

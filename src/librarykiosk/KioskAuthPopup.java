@@ -190,14 +190,19 @@ public class KioskAuthPopup extends JFrame {
 	 */
 	public boolean compareEmployeeID(char[] validationArray) {
 		String validationString = new String(validationArray);
-		Integer validationInteger = Integer.parseInt(validationString);
-		Employee tempEmployee = new Employee(validationInteger, "name");
+		try {
+		    Integer validationInteger = Integer.parseInt(validationString);
+		    Employee tempEmployee = new Employee(validationInteger, "name");
 
-		if (tempEmployee.authorize()) {
-			return true;
+		    if (tempEmployee.authorize()) {
+		        return true;
+		    }
+
+		} catch (NumberFormatException e) {
+			txtKAPassField.setBackground(new Color(255, 0, 0));
 		}
+
 		return false;
-		// TODO: Implement error handling
 	}
 	
 	/**
